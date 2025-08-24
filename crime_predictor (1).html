@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crime Predictor</title>
+  <script>
+    async function predictCrime() {
+      const lat = parseFloat(document.getElementById("lat").value);
+      const lon = parseFloat(document.getElementById("lon").value);
+      const now = new Date();
+      const hour = now.getHours();
+      const day = now.getDay();
+
+      const response = await fetch("https://3bf0-34-27-168-232.ngrok-free.app/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat, lon, hour, day })
+      });
+
+      const result = await response.json();
+      document.getElementById("output").innerHTML = `
+        <b>Predicted Crime:</b> ${result.predicted_crime}<br>
+        <b>Probability:</b> ${result.probability}
+      `;
+    }
+  </script>
+</head>
+<body>
+  <h1>🕵️ Real-Time Crime Predictor</h1>
+  <input id="lat" placeholder="Latitude" />
+  <input id="lon" placeholder="Longitude" />
+  <button onclick="predictCrime()">Predict</button>
+  <p id="output"></p>
+</body>
+</html>
